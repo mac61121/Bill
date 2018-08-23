@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script>
+        $(function () {
+            selInfo();
+        })
+        /*查询图书信息*/
+        function selInfo() {
+            $(".info").html("");
+            $.ajax({
+                "url":"selInfo/"+$(".categoryId").val(),
+                "dataType":"json",
+                "type":"post",
+                "success":function (result) {
+                    $(".info").html("<tr>\n" +
+                        "        <td>图书编号</td>\n" +
+                        "        <td>图书名称</td>\n" +
+                        "        <td>图书摘要</td>\n" +
+                        "        <td>上传人</td>\n" +
+                        "        <td>上传时间</td>\n" +
+                        "        <td>操作</td>\n" +
+                        "    </tr>");
+                    $(result).each(function () {
+                        $(".info").append("<tr>\n" +
+                            "        <td>"+this.id+"</td>\n" +
+                            "        <td>"+this.title+"</td>\n" +
+                            "        <td>"+this.summary+"</td>\n" +
+                            "        <td>"+this.uploadUser+"</td>\n" +
+                            "        <td>"+this.createDate+"</td>\n" +
+                            "        <td><a href='toUpdtemp/id="+this.id+"'>修改</a>&nbsp;&nbsp;<a href='#'  onclick='delInfo("+this.id+")'>删除</a></td>\n" +
+                            "    </tr>")
+                        $(".info tr:even").css("background-color","gray");
+                    })
+                }
+            })
+        }
+        function toInstemp() {
+            location.href="toInstemp";
+        }
+        function delInfo(eid) {
+            var falg=confirm("确定要删除吗？");
+            if(falg!=true)return;
+            $.ajax({
+                "url":"delInfo/"+eid,
+                "dataType":"json",
+                "type":"post",
+                "success":function (result) {
+                    if(result>0){
+                        alert("删除成功！")
+                        selInfo();
+                    }else {
+                        alert("删除失败！")
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    图书分类：<select name="categoryId" class="categoryId">
+        <option value="0">全部</option>
+        <option value="1">IT计算机</option>
+        <option value="2">玄幻小说</option>
+        <option value="3">言情小说</option>
+    </select>
+    <input type="button" value="查询" onclick="selInfo()">
+<input type="button" value="新增电子图书" onclick="toInstemp()"><br>
+<table class="info">
+    <tr>
+        <td>图书编号</td>
+        <td>图书名称</td>
+        <td>图书摘要</td>
+        <td>上传人</td>
+        <td>上传时间</td>
+        <td>操作</td>
+    </tr>
+</table>
+</body>
+</html>

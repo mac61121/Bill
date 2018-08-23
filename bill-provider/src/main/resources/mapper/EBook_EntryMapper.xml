@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bdqn.billprovider.dao.Ebook_EntryDao">
+    <select id="selInfo" resultType="cn.bdqn.pojo.Ebook_Entry">
+        SELECT * FROM ebook_entry
+        <where>
+            1=1
+            <if test="categoryId!=null and categoryId!='' and categoryId!=0">
+               and categoryId=#{categoryId}
+            </if>
+        </where>
+    </select>
+    <insert id="insInfo" parameterType="cn.bdqn.pojo.Ebook_Entry">
+        INSERT INTO ebook_entry VALUES(NULL,#{categoryId},#{title},#{summary},#{uploadUser},#{createDate})
+    </insert>
+    <delete id="delInfo" parameterType="Integer">
+        DELETE FROM ebook_entry WHERE id=#{id}
+    </delete>
+    <update id="updInfo" parameterType="cn.bdqn.pojo.Ebook_Entry">
+        UPDATE ebook_entry SET title=#{title},summary=#{summary},uploadUser=#{uploadUser},createDate=#{createDate} WHERE id=#{id}
+    </update>
+    <select id="selInfoById" parameterType="Integer" resultType="cn.bdqn.pojo.Ebook_Entry">
+        SELECT * FROM ebook_entry WHERE id=#{id}
+    </select>
+
+</mapper>
